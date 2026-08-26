@@ -1,0 +1,56 @@
+# Base
+CUDA: True
+SEED: 10
+SUPPORT_DIR: "VQVAE/body_models"
+SAVE_DIR: "outputs/S3/vqvae"
+NUM_WORKERS: 8
+
+# Dataset
+DATASET_PATH: "VQVAE/dataset"
+PROTOCOL: "randomsplit_0"
+TRAIN_DATASET_REPEAT_TIMES: 500
+INPUT_MOTION_LENGTH: 20
+FPS: 60
+MOTION_NFEAT: 132
+SPARSE_DIM: 54
+
+# Training
+BATCH_SIZE: 512
+LR: 3e-4
+EPOCH: 100
+WEIGHT_DECAY: 1e-4
+part: "all"
+MILESTONES: [30, 50]
+MASK_RATIO: 0.5
+ROOTLOSS: True
+LOSS:
+  alpha_codebook: 0.25
+  fk_loss: 5
+  hand_align_loss: 5
+
+# Testing
+OVERLAPPING_TEST: False
+NUM_PER_BATCH: 1024
+
+INFERENCE:
+  DECODE: "soft"
+  CFG_SCALE: 1.0
+  TAU: 1.0
+  SOFT_TOP_K: 0
+
+VAR:
+  DEPTH: 8
+  PATCH_NUMS: [5, 10, 20]
+  VAE_CKPT: "outputs/S3/vqvae/best.pth.tar"
+  CKPT: "outputs/S3/var/best.pth.tar"
+
+VQVAE:
+  in_dim: 132
+  n_layers: [6, 6]
+  hid_dim: 512
+  heads: 4
+  dropout: 0.
+  n_codebook: 8
+  n_e: 2048
+  e_dim: 256
+  beta: 1.0
