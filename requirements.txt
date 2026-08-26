@@ -1,0 +1,9 @@
+accelerate
+einops
+numpy<2
+pytz
+pyyaml
+tensorboard
+tqdm
+typed-argument-parser
+yacs

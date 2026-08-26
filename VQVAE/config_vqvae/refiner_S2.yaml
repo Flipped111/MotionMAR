@@ -1,0 +1,68 @@
+# Base
+CUDA: True
+SEED: 10
+SUPPORT_DIR: "VQVAE/body_models"
+SAVE_DIR: "outputs/S2/refiner"
+NUM_WORKERS: 8
+
+# Dataset
+DATASET_PATH: "VQVAE/dataset"
+PROTOCOL: "1_small_dataset"
+FULL_MOTION_LENGTH: 500
+INPUT_MOTION_LENGTH: 20
+MOTION_NFEAT: 132
+SPARSE_DIM: 72
+MASK_TRAINING: True
+MASK_RATIO: 0.5
+LAST_FRAME: True
+LOSS_FUNC: "l1"
+FPS: 60
+
+# Training
+BATCH_SIZE: 1
+NUM_PER_BATCH: 512
+EPOCH: 200
+LR: 8e-5
+WEIGHT_DECAY: 1e-4
+MILESTONES: [ 15 ]
+GAMMA: 0.2
+
+# Inference used to generate refiner inputs.
+INFERENCE:
+  DECODE: "soft"
+  CFG_SCALE: 1.0
+  TAU: 1.0
+  SOFT_TOP_K: 0
+
+# VQVAE config
+VQVAE:
+  in_dim: 132
+  n_layers: [4, 4]
+  hid_dim: 512
+  heads: 4
+  dropout: 0.
+  n_codebook: 8
+  n_e: 1024
+  e_dim: 64
+  beta: 1.0
+
+VAR:
+  DEPTH: 8
+  PATCH_NUMS: [5, 10, 20]
+  VAE_CKPT: "outputs/S2/vqvae/best.pth.tar"
+  CKPT: "outputs/S2/var/best.pth.tar"
+
+# Refiner config — adds a rotation loss to optimise MPJRE
+REFINER:
+  CKPT: "outputs/S2/refiner/best.pth.tar"
+  CHECKPOINT: "outputs/S2/refiner/checkpoint.pth.tar"
+  n_layers: 2
+  hidden_dim: 512
+  loss_weight:
+    recons: 0.1
+    rot: 0.1
+    vel_1: 60
+    vel_2: 20
+    fk_loss: 0.1
+    hand_align: 0.1
+    jitter: 0.3
